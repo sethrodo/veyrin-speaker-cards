@@ -1,4 +1,4 @@
-/* Veyrin Speaker Cards v0.1.0 */
+/* Veyrin Speaker Cards v0.1.2 visual polish */
 
 .vsc-settings .inline-drawer-content {
     padding-bottom: 0.75rem;
@@ -24,52 +24,110 @@
     margin: 0.45rem 0 0.7rem;
 }
 
+/* =========================
+   Speaker card rendering
+   ========================= */
+
 .vsc-block-list {
     display: flex;
     flex-direction: column;
-    gap: 0.72rem;
+    gap: 0.9rem;
     width: 100%;
+    padding: 0.15rem 0.1rem 0.25rem;
 }
 
 .vsc-card {
     --vsc-speaker-hue: 210;
     position: relative;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, hsl(var(--vsc-speaker-hue) 65% 62%) 38%, var(--SmartThemeBorderColor, #777));
-    border-left: 4px solid hsl(var(--vsc-speaker-hue) 62% 58%);
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(30, 30, 30, 0.75)) 88%, hsl(var(--vsc-speaker-hue) 45% 40%) 12%);
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 18px;
+    border: 1px solid color-mix(
+        in srgb,
+        hsl(var(--vsc-speaker-hue) 70% 62%) 30%,
+        var(--SmartThemeBorderColor, #777)
+    );
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, hsl(var(--vsc-speaker-hue) 52% 36%) 12%, rgba(255,255,255,0.03)) 0%,
+            color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(24,24,24,0.92)) 88%, hsl(var(--vsc-speaker-hue) 48% 34%) 12%) 100%
+        );
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.20),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+    backdrop-filter: blur(8px);
+}
+
+.vsc-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: linear-gradient(
+        180deg,
+        hsl(var(--vsc-speaker-hue) 78% 70% / 0.95),
+        hsl(var(--vsc-speaker-hue) 62% 52% / 0.88)
+    );
 }
 
 .vsc-card-dm {
-    border-left-width: 2px;
-    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(30, 30, 30, 0.75)) 95%, white 5%);
+    border-color: color-mix(in srgb, var(--SmartThemeBorderColor, #777) 82%, rgba(255,255,255,0.04));
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.025) 0%,
+            color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(24,24,24,0.94)) 96%, white 4%) 100%
+        );
+}
+
+.vsc-card-dm::before {
+    width: 4px;
+    background: linear-gradient(
+        180deg,
+        rgba(180, 160, 255, 0.9),
+        rgba(120, 90, 220, 0.85)
+    );
 }
 
 .vsc-card-header {
     display: flex;
     align-items: center;
-    gap: 0.62rem;
-    min-height: 44px;
-    padding: 0.48rem 0.72rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor, #777) 48%, transparent);
-    background: color-mix(in srgb, hsl(var(--vsc-speaker-hue) 45% 45%) 10%, transparent);
+    gap: 0.9rem;
+    min-height: 68px;
+    padding: 0.82rem 1rem 0.72rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor, #777) 40%, transparent);
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, hsl(var(--vsc-speaker-hue) 48% 48%) 10%, rgba(255,255,255,0.02)) 0%,
+        rgba(255,255,255,0.01) 100%
+    );
 }
 
 .vsc-avatar {
-    flex: 0 0 38px;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    flex: 0 0 58px;
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
     overflow: hidden;
     display: grid;
     place-items: center;
-    background: color-mix(in srgb, hsl(var(--vsc-speaker-hue) 55% 55%) 26%, var(--SmartThemeBlurTintColor, #222));
-    border: 1px solid color-mix(in srgb, hsl(var(--vsc-speaker-hue) 65% 62%) 45%, transparent);
-    font-weight: 750;
-    font-size: 0.78em;
-    letter-spacing: 0.03em;
+    background: color-mix(
+        in srgb,
+        hsl(var(--vsc-speaker-hue) 55% 55%) 22%,
+        var(--SmartThemeBlurTintColor, #222)
+    );
+    border: 1px solid color-mix(
+        in srgb,
+        hsl(var(--vsc-speaker-hue) 65% 64%) 45%,
+        rgba(255,255,255,0.05)
+    );
+    box-shadow:
+        0 6px 14px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    font-weight: 800;
+    font-size: 0.95em;
+    letter-spacing: 0.04em;
+    line-height: 1;
 }
 
 .vsc-avatar img {
@@ -77,18 +135,21 @@
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center 30%;
+    object-position: center 24%;
 }
 
 .vsc-speaker-name {
-    font-weight: 750;
-    letter-spacing: 0.025em;
-    line-height: 1.15;
+    font-weight: 800;
+    font-size: 1.08rem;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
 }
 
 .vsc-card-body {
-    padding: 0.72rem 0.82rem 0.78rem;
-    line-height: 1.55;
+    padding: 0.78rem 1rem 1rem;
+    line-height: 1.62;
+    font-size: 1rem;
 }
 
 .vsc-card-body > :first-child {
@@ -99,9 +160,42 @@
     margin-bottom: 0;
 }
 
+.vsc-card-body p {
+    margin: 0 0 0.7rem;
+}
+
 .vsc-card-body q {
     font-style: normal;
 }
+
+.vsc-card-body em {
+    opacity: 0.95;
+}
+
+/* Make the body feel aligned beneath the speaker name, like a mini message */
+@media (min-width: 701px) {
+    .vsc-card-body {
+        padding-left: calc(1rem + 58px + 0.9rem);
+        margin-top: -0.15rem;
+    }
+}
+
+/* Slight visual differentiation between DM and NPC cards */
+.vsc-card:not(.vsc-card-dm) {
+    margin-left: 0.28rem;
+}
+
+.vsc-card-dm .vsc-speaker-name {
+    color: color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 94%, rgba(190,160,255,0.9));
+}
+
+.vsc-card:not(.vsc-card-dm) .vsc-speaker-name {
+    color: color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 92%, hsl(var(--vsc-speaker-hue) 75% 75%));
+}
+
+/* =========================
+   Portrait library UI
+   ========================= */
 
 .vsc-portrait-group {
     margin: 0.7rem 0;
@@ -114,15 +208,15 @@
 
 .vsc-portrait-images {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(82px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 0.6rem;
 }
 
 .vsc-portrait-item {
     position: relative;
-    min-height: 88px;
+    min-height: 96px;
     border: 1px solid var(--SmartThemeBorderColor, #777);
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.12);
 }
@@ -157,28 +251,45 @@
     padding: 0.65rem 0;
 }
 
+/* =========================
+   Mobile
+   ========================= */
+
 @media (max-width: 700px) {
     .vsc-block-list {
-        gap: 0.55rem;
+        gap: 0.68rem;
     }
 
     .vsc-card {
-        border-radius: 10px;
+        border-radius: 14px;
     }
 
     .vsc-card-header {
-        min-height: 40px;
-        padding: 0.4rem 0.55rem;
+        min-height: 56px;
+        padding: 0.58rem 0.72rem 0.56rem;
+        gap: 0.7rem;
     }
 
     .vsc-avatar {
-        flex-basis: 34px;
-        width: 34px;
-        height: 34px;
-        border-radius: 9px;
+        flex-basis: 46px;
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+        font-size: 0.82em;
+    }
+
+    .vsc-speaker-name {
+        font-size: 1rem;
     }
 
     .vsc-card-body {
-        padding: 0.58rem 0.65rem 0.65rem;
+        padding: 0.62rem 0.72rem 0.78rem;
+        font-size: 0.98rem;
+        line-height: 1.56;
+        margin-top: 0;
+    }
+
+    .vsc-card:not(.vsc-card-dm) {
+        margin-left: 0;
     }
 }
