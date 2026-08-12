@@ -1,5 +1,5 @@
 /*
- * Veyrin Speaker Cards v0.1.1
+ * Veyrin Speaker Cards v0.1.3
  * Visual speaker separation for a single SillyTavern assistant response.
  *
  * No extra LLM calls are made by this extension.
@@ -11,6 +11,20 @@ const PROMPT_KEY = 'veyrin_speaker_cards_format';
 const IN_CHAT = 1;
 const SYSTEM_ROLE = 0;
 const DEFAULT_DM_NAME = 'Veyrin DM';
+
+const CHARACTER_ACCENTS = {
+    'veyrin dm': '#8B6AD9',
+    'dm': '#8B6AD9',
+    'narrator': '#8B6AD9',
+    'valeria': '#B64A4A',
+    'seraphine veyl': '#6F8FAF',
+    'seraphine': '#6F8FAF',
+    'lysanthir': '#7B5CB8',
+    'elena': '#A45F3F',
+    'captain marra': '#A77B53',
+    'morwen': '#8893A5',
+    'seth': '#5F7A52',
+};
 
 const DEFAULT_SETTINGS = {
     enabled: true,
@@ -159,6 +173,38 @@ function hashString(value) {
     return hash >>> 0;
 }
 
+function hslToHex(h, s, l) {
+    s /= 100;
+    l /= 100;
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+    const m = l - c / 2;
+    let r = 0, g = 0, b = 0;
+    if (h < 60) [r, g, b] = [c, x, 0];
+    else if (h < 120) [r, g, b] = [x, c, 0];
+    else if (h < 180) [r, g, b] = [0, c, x];
+    else if (h < 240) [r, g, b] = [0, x, c];
+    else if (h < 300) [r, g, b] = [x, 0, c];
+    else [r, g, b] = [c, 0, x];
+    const toHex = n => Math.round((n + m) * 255).toString(16).padStart(2, '0');
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+}
+
+function suggestedAccentColor(speaker) {
+    const normalized = normalizeName(speaker);
+    if (CHARACTER_ACCENTS[normalized]) return CHARACTER_ACCENTS[normalized];
+    const firstName = normalized.split(' ')[0];
+    if (CHARACTER_ACCENTS[firstName]) return CHARACTER_ACCENTS[firstName];
+    const hue = hashString(normalized || 'speaker') % 360;
+    return hslToHex(hue, 58, 54);
+}
+
+function accentColorFor(speaker, entry) {
+    const custom = String(entry?.accentColor || '').trim();
+    if (/^#[0-9a-f]{6}$/i.test(custom)) return custom.toUpperCase();
+    return suggestedAccentColor(speaker);
+}
+
 async function getPortraitLibrary() {
     if (portraitLibraryCache) return portraitLibraryCache;
     portraitLibraryCache = (await portraitStore?.getItem('library')) || {};
@@ -251,11 +297,11 @@ async function renderMessage(messageId) {
         const dm = isDmSpeaker(block.speaker);
         const entry = findPortraitEntry(library, block.speaker);
         const portrait = choosePortrait(entry, id, blockIndex);
-        const accent = hashString(normalizeName(block.speaker)) % 360;
+        const accentColor = accentColorFor(block.speaker, entry);
 
         const card = document.createElement('section');
         card.className = `vsc-card${dm ? ' vsc-card-dm' : ''}`;
-        card.style.setProperty('--vsc-speaker-hue', String(accent));
+        card.style.setProperty('--vsc-accent', accentColor);
         card.dataset.speaker = block.speaker;
 
         const header = document.createElement('header');
@@ -371,6 +417,17 @@ async function makeDefaultPortrait(characterKey, imageId) {
     await renderVisibleMessages();
 }
 
+async function setCharacterAccent(characterKey, color) {
+    const library = await getPortraitLibrary();
+    const entry = library[characterKey];
+    if (!entry) return;
+    if (color && /^#[0-9a-f]{6}$/i.test(color)) entry.accentColor = color.toUpperCase();
+    else delete entry.accentColor;
+    await savePortraitLibrary(library);
+    await refreshPortraitList();
+    await renderVisibleMessages();
+}
+
 async function refreshPortraitList() {
     const list = document.querySelector('#vsc_portrait_list');
     if (!list) return;
@@ -390,10 +447,36 @@ async function refreshPortraitList() {
         const group = document.createElement('div');
         group.className = 'vsc-portrait-group';
 
+        const groupHeader = document.createElement('div');
+        groupHeader.className = 'vsc-portrait-group-header';
+
         const title = document.createElement('div');
         title.className = 'vsc-portrait-group-title';
         title.textContent = `${entry.displayName} · ${entry.images?.length || 0}`;
-        group.append(title);
+
+        const accentEditor = document.createElement('div');
+        accentEditor.className = 'vsc-accent-editor';
+
+        const accentLabel = document.createElement('span');
+        accentLabel.textContent = 'Accent';
+
+        const accentInput = document.createElement('input');
+        accentInput.type = 'color';
+        accentInput.className = 'vsc-accent-input';
+        accentInput.value = accentColorFor(entry.displayName, entry);
+        accentInput.title = 'Choose this character\'s accent color';
+        accentInput.addEventListener('change', () => setCharacterAccent(key, accentInput.value));
+
+        const autoAccent = document.createElement('button');
+        autoAccent.type = 'button';
+        autoAccent.className = 'menu_button vsc-small-button vsc-accent-auto';
+        autoAccent.textContent = 'Auto';
+        autoAccent.title = 'Reset to the suggested character color';
+        autoAccent.addEventListener('click', () => setCharacterAccent(key, null));
+
+        accentEditor.append(accentLabel, accentInput, autoAccent);
+        groupHeader.append(title, accentEditor);
+        group.append(groupHeader);
 
         const images = document.createElement('div');
         images.className = 'vsc-portrait-images';
@@ -496,7 +579,7 @@ function installSettingsPanel() {
 
                 <hr>
                 <b>Portrait Library</b>
-                <div class="vsc-help">You can add portraits after installation. Multiple portraits per character are supported. The ★ image is the default.</div>
+                <div class="vsc-help">You can add portraits after installation. Multiple portraits per character are supported. The ★ image is the default. Each character also has an editable accent color; Auto restores the suggested Veyrin palette.</div>
                 <input id="vsc_portrait_name" class="text_pole" type="text" placeholder="Character name, e.g. Elena">
                 <input id="vsc_portrait_file" type="file" accept="image/*" hidden>
                 <div class="vsc-button-row">

@@ -1,4 +1,4 @@
-/* Veyrin Speaker Cards v0.1.2 visual polish */
+/* Veyrin Speaker Cards v0.1.3 */
 
 .vsc-settings .inline-drawer-content {
     padding-bottom: 0.75rem;
@@ -25,107 +25,83 @@
 }
 
 /* =========================
-   Speaker card rendering
+   Message layout
    ========================= */
 
 .vsc-block-list {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: 0.72rem;
     width: 100%;
-    padding: 0.15rem 0.1rem 0.25rem;
+    padding: 0.1rem 0 0.2rem;
 }
 
 .vsc-card {
-    --vsc-speaker-hue: 210;
+    --vsc-accent: #7f76b8;
     position: relative;
     overflow: hidden;
-    border-radius: 18px;
-    border: 1px solid color-mix(
-        in srgb,
-        hsl(var(--vsc-speaker-hue) 70% 62%) 30%,
-        var(--SmartThemeBorderColor, #777)
-    );
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, hsl(var(--vsc-speaker-hue) 52% 36%) 12%, rgba(255,255,255,0.03)) 0%,
-            color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(24,24,24,0.92)) 88%, hsl(var(--vsc-speaker-hue) 48% 34%) 12%) 100%
-        );
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.20),
-        inset 0 1px 0 rgba(255,255,255,0.03);
-    backdrop-filter: blur(8px);
+    border-radius: 17px;
+    border: 1px solid color-mix(in srgb, var(--vsc-accent) 32%, var(--SmartThemeBorderColor, #777));
+    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(28, 28, 28, 0.90)) 91%, var(--vsc-accent) 9%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255,255,255,0.025);
 }
 
 .vsc-card::before {
     content: "";
     position: absolute;
     inset: 0 auto 0 0;
-    width: 5px;
-    background: linear-gradient(
-        180deg,
-        hsl(var(--vsc-speaker-hue) 78% 70% / 0.95),
-        hsl(var(--vsc-speaker-hue) 62% 52% / 0.88)
-    );
-}
-
-.vsc-card-dm {
-    border-color: color-mix(in srgb, var(--SmartThemeBorderColor, #777) 82%, rgba(255,255,255,0.04));
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.025) 0%,
-            color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(24,24,24,0.94)) 96%, white 4%) 100%
-        );
-}
-
-.vsc-card-dm::before {
     width: 4px;
-    background: linear-gradient(
-        180deg,
-        rgba(180, 160, 255, 0.9),
-        rgba(120, 90, 220, 0.85)
-    );
+    background: var(--vsc-accent);
+    opacity: 0.92;
 }
 
-.vsc-card-header {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    min-height: 68px;
-    padding: 0.82rem 1rem 0.72rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor, #777) 40%, transparent);
-    background: linear-gradient(
-        180deg,
-        color-mix(in srgb, hsl(var(--vsc-speaker-hue) 48% 48%) 10%, rgba(255,255,255,0.02)) 0%,
-        rgba(255,255,255,0.01) 100%
-    );
+/* NPCs behave like compact mini-messages: portrait at left, name and prose at right. */
+.vsc-card:not(.vsc-card-dm) {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 0.92rem;
+    padding: 0.86rem 1rem 0.9rem 1.05rem;
+    margin-left: 0.22rem;
+}
+
+.vsc-card:not(.vsc-card-dm) .vsc-card-header {
+    display: contents;
+}
+
+.vsc-card:not(.vsc-card-dm) .vsc-avatar {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+}
+
+.vsc-card:not(.vsc-card-dm) .vsc-speaker-name {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    padding: 0.12rem 0 0.28rem;
+}
+
+.vsc-card:not(.vsc-card-dm) .vsc-card-body {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+    padding: 0.1rem 0 0;
 }
 
 .vsc-avatar {
-    flex: 0 0 58px;
-    width: 58px;
-    height: 58px;
-    border-radius: 16px;
+    flex: 0 0 72px;
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
     overflow: hidden;
     display: grid;
     place-items: center;
-    background: color-mix(
-        in srgb,
-        hsl(var(--vsc-speaker-hue) 55% 55%) 22%,
-        var(--SmartThemeBlurTintColor, #222)
-    );
-    border: 1px solid color-mix(
-        in srgb,
-        hsl(var(--vsc-speaker-hue) 65% 64%) 45%,
-        rgba(255,255,255,0.05)
-    );
-    box-shadow:
-        0 6px 14px rgba(0,0,0,0.22),
-        inset 0 1px 0 rgba(255,255,255,0.05);
+    background: color-mix(in srgb, var(--vsc-accent) 24%, var(--SmartThemeBlurTintColor, #222));
+    border: 2px solid color-mix(in srgb, var(--vsc-accent) 72%, rgba(255,255,255,0.15));
+    box-shadow: 0 7px 18px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
     font-weight: 800;
-    font-size: 0.95em;
+    font-size: 1rem;
     letter-spacing: 0.04em;
     line-height: 1;
 }
@@ -135,20 +111,19 @@
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center 24%;
+    object-position: center 25%;
 }
 
 .vsc-speaker-name {
     font-weight: 800;
     font-size: 1.08rem;
-    letter-spacing: 0.02em;
-    line-height: 1.1;
-    text-wrap: balance;
+    letter-spacing: 0.018em;
+    line-height: 1.15;
+    color: color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 88%, var(--vsc-accent));
 }
 
 .vsc-card-body {
-    padding: 0.78rem 1rem 1rem;
-    line-height: 1.62;
+    line-height: 1.58;
     font-size: 1rem;
 }
 
@@ -161,62 +136,102 @@
 }
 
 .vsc-card-body p {
-    margin: 0 0 0.7rem;
+    margin: 0 0 0.62rem;
 }
 
 .vsc-card-body q {
     font-style: normal;
 }
 
-.vsc-card-body em {
-    opacity: 0.95;
+/* DM blocks are intentionally quieter: the native SillyTavern DM avatar already frames the whole response. */
+.vsc-card-dm {
+    padding: 0.68rem 0.92rem 0.78rem 1.05rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(28,28,28,0.92)) 96%, var(--vsc-accent) 4%);
+    border-color: color-mix(in srgb, var(--vsc-accent) 22%, var(--SmartThemeBorderColor, #777));
+    box-shadow: 0 5px 17px rgba(0,0,0,0.13);
 }
 
-/* Make the body feel aligned beneath the speaker name, like a mini message */
-@media (min-width: 701px) {
-    .vsc-card-body {
-        padding-left: calc(1rem + 58px + 0.9rem);
-        margin-top: -0.15rem;
-    }
+.vsc-card-dm .vsc-card-header {
+    display: flex;
+    align-items: center;
+    min-height: 0;
+    padding: 0 0 0.34rem;
+    border: 0;
+    background: none;
 }
 
-/* Slight visual differentiation between DM and NPC cards */
-.vsc-card:not(.vsc-card-dm) {
-    margin-left: 0.28rem;
+.vsc-card-dm .vsc-avatar {
+    display: none;
 }
 
 .vsc-card-dm .vsc-speaker-name {
-    color: color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 94%, rgba(190,160,255,0.9));
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    opacity: 0.78;
 }
 
-.vsc-card:not(.vsc-card-dm) .vsc-speaker-name {
-    color: color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 92%, hsl(var(--vsc-speaker-hue) 75% 75%));
+.vsc-card-dm .vsc-card-body {
+    padding: 0;
 }
 
 /* =========================
-   Portrait library UI
+   Portrait + accent editor
    ========================= */
 
 .vsc-portrait-group {
-    margin: 0.7rem 0;
+    margin: 0.78rem 0;
+    padding: 0.55rem 0 0.15rem;
+    border-top: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor, #777) 55%, transparent);
+}
+
+.vsc-portrait-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    margin-bottom: 0.42rem;
 }
 
 .vsc-portrait-group-title {
-    font-weight: 650;
-    margin-bottom: 0.35rem;
+    font-weight: 700;
+}
+
+.vsc-accent-editor {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    opacity: 0.92;
+}
+
+.vsc-accent-input {
+    width: 34px;
+    height: 28px;
+    min-width: 34px;
+    padding: 1px;
+    border: 1px solid var(--SmartThemeBorderColor, #777);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.vsc-accent-auto {
+    font-size: 0.78rem !important;
 }
 
 .vsc-portrait-images {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
-    gap: 0.6rem;
+    gap: 0.55rem;
 }
 
 .vsc-portrait-item {
     position: relative;
     min-height: 96px;
     border: 1px solid var(--SmartThemeBorderColor, #777);
-    border-radius: 12px;
+    border-radius: 11px;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.12);
 }
@@ -231,7 +246,7 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    object-position: center 30%;
+    object-position: center 28%;
 }
 
 .vsc-portrait-controls {
@@ -257,25 +272,23 @@
 
 @media (max-width: 700px) {
     .vsc-block-list {
-        gap: 0.68rem;
+        gap: 0.58rem;
     }
 
-    .vsc-card {
+    .vsc-card:not(.vsc-card-dm) {
+        grid-template-columns: 58px minmax(0, 1fr);
+        column-gap: 0.68rem;
+        padding: 0.7rem 0.72rem 0.76rem 0.82rem;
+        margin-left: 0;
         border-radius: 14px;
     }
 
-    .vsc-card-header {
-        min-height: 56px;
-        padding: 0.58rem 0.72rem 0.56rem;
-        gap: 0.7rem;
-    }
-
     .vsc-avatar {
-        flex-basis: 46px;
-        width: 46px;
-        height: 46px;
-        border-radius: 13px;
-        font-size: 0.82em;
+        width: 54px;
+        height: 54px;
+        flex-basis: 54px;
+        border-radius: 14px;
+        font-size: 0.84rem;
     }
 
     .vsc-speaker-name {
@@ -283,13 +296,18 @@
     }
 
     .vsc-card-body {
-        padding: 0.62rem 0.72rem 0.78rem;
         font-size: 0.98rem;
-        line-height: 1.56;
-        margin-top: 0;
+        line-height: 1.54;
     }
 
-    .vsc-card:not(.vsc-card-dm) {
-        margin-left: 0;
+    .vsc-card-dm {
+        padding: 0.58rem 0.7rem 0.66rem 0.8rem;
+        border-radius: 12px;
+    }
+
+    .vsc-portrait-group-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.35rem;
     }
 }

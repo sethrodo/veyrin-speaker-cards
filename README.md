@@ -2,7 +2,7 @@
 
 A lightweight SillyTavern UI extension that turns one AI response into visually separated speaker cards while keeping the underlying generation as a single assistant message.
 
-## What v0.1.1 does
+## What v0.1.3 does
 
 - Keeps one story generation / one main-model API call.
 - Injects a short, late prompt instruction telling the model to emit `[[SPK:Name]] ... [[/SPK]]` speaker markers.
@@ -59,6 +59,6 @@ Portraits are stored in the browser that uploaded them. If you use SillyTavern f
 MIT
 
 
-## v0.1.1 fix
+## v0.1.3 fix
 
 - **Add Portrait** now opens the image file picker directly. This fixes the v0.1.0 issue where SillyTavern could hide the standalone file input, causing “Choose an image file” when the button was clicked.
