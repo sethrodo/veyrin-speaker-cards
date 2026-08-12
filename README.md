@@ -2,7 +2,7 @@
 
 A lightweight SillyTavern UI extension that turns one AI response into visually separated speaker cards while keeping the underlying generation as a single assistant message.
 
-## What v0.1.0 does
+## What v0.1.1 does
 
 - Keeps one story generation / one main-model API call.
 - Injects a short, late prompt instruction telling the model to emit `[[SPK:Name]] ... [[/SPK]]` speaker markers.
@@ -31,8 +31,8 @@ SillyTavern supports third-party UI extensions directly from a Git repository UR
 Open **Extensions → Veyrin Speaker Cards**.
 
 1. Enter the exact character name (for example `Elena`).
-2. Choose an image.
-3. Click **Add Portrait**.
+2. Click **Add Portrait**.
+3. Choose the image file when the file picker opens.
 
 You can add several images for the same character. Click `★`/`☆` to choose the default.
 
@@ -57,3 +57,8 @@ Portraits are stored in the browser that uploaded them. If you use SillyTavern f
 ## License
 
 MIT
+
+
+## v0.1.1 fix
+
+- **Add Portrait** now opens the image file picker directly. This fixes the v0.1.0 issue where SillyTavern could hide the standalone file input, causing “Choose an image file” when the button was clicked.

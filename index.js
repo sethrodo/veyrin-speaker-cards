@@ -1,5 +1,5 @@
 /*
- * Veyrin Speaker Cards v0.1.0
+ * Veyrin Speaker Cards v0.1.1
  * Visual speaker separation for a single SillyTavern assistant response.
  *
  * No extra LLM calls are made by this extension.
@@ -498,7 +498,7 @@ function installSettingsPanel() {
                 <b>Portrait Library</b>
                 <div class="vsc-help">You can add portraits after installation. Multiple portraits per character are supported. The ★ image is the default.</div>
                 <input id="vsc_portrait_name" class="text_pole" type="text" placeholder="Character name, e.g. Elena">
-                <input id="vsc_portrait_file" type="file" accept="image/*">
+                <input id="vsc_portrait_file" type="file" accept="image/*" hidden>
                 <div class="vsc-button-row">
                     <button id="vsc_add_portrait" type="button" class="menu_button">Add Portrait</button>
                     <button id="vsc_rerender" type="button" class="menu_button">Re-render Chat</button>
@@ -567,15 +567,33 @@ function installSettingsPanel() {
         await renderVisibleMessages();
     });
 
-    panel.querySelector('#vsc_add_portrait').addEventListener('click', async () => {
-        const name = panel.querySelector('#vsc_portrait_name').value;
-        const file = panel.querySelector('#vsc_portrait_file').files?.[0];
+    const portraitNameInput = panel.querySelector('#vsc_portrait_name');
+    const portraitFileInput = panel.querySelector('#vsc_portrait_file');
+    const addPortraitButton = panel.querySelector('#vsc_add_portrait');
+
+    // The Add Portrait button is the file-picker trigger. This avoids relying on
+    // SillyTavern/browser styling of a standalone <input type="file"> control.
+    addPortraitButton.addEventListener('click', () => {
+        const name = portraitNameInput.value.trim();
+        if (!name) {
+            globalThis.toastr?.error?.('Enter the character name first.', 'Veyrin Speaker Cards');
+            portraitNameInput.focus();
+            return;
+        }
+        portraitFileInput.click();
+    });
+
+    portraitFileInput.addEventListener('change', async e => {
+        const name = portraitNameInput.value.trim();
+        const file = e.target.files?.[0];
+        if (!file) return;
         try {
             await addPortrait(name, file);
-            panel.querySelector('#vsc_portrait_file').value = '';
-            globalThis.toastr?.success?.(`Portrait added for ${name.trim()}.`, 'Veyrin Speaker Cards');
+            globalThis.toastr?.success?.(`Portrait added for ${name}.`, 'Veyrin Speaker Cards');
         } catch (error) {
             globalThis.toastr?.error?.(error.message, 'Veyrin Speaker Cards');
+        } finally {
+            e.target.value = '';
         }
     });
 
@@ -635,7 +653,7 @@ async function initialize() {
     installEventHandlers();
     applyPromptInjection();
     await renderVisibleMessages();
-    console.log('[Veyrin Speaker Cards] v0.1.0 loaded');
+    console.log('[Veyrin Speaker Cards] v0.1.1 loaded');
 }
 
 jQuery(initialize);
