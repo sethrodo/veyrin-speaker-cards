@@ -1,0 +1,184 @@
+/* Veyrin Speaker Cards v0.1.0 */
+
+.vsc-settings .inline-drawer-content {
+    padding-bottom: 0.75rem;
+}
+
+.vsc-settings .text_pole,
+.vsc-settings input[type="file"] {
+    width: 100%;
+    margin: 0.25rem 0 0.55rem;
+}
+
+.vsc-help {
+    opacity: 0.75;
+    font-size: 0.88em;
+    line-height: 1.35;
+    margin: 0.4rem 0 0.7rem;
+}
+
+.vsc-button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0.45rem 0 0.7rem;
+}
+
+.vsc-block-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.72rem;
+    width: 100%;
+}
+
+.vsc-card {
+    --vsc-speaker-hue: 210;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, hsl(var(--vsc-speaker-hue) 65% 62%) 38%, var(--SmartThemeBorderColor, #777));
+    border-left: 4px solid hsl(var(--vsc-speaker-hue) 62% 58%);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(30, 30, 30, 0.75)) 88%, hsl(var(--vsc-speaker-hue) 45% 40%) 12%);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+.vsc-card-dm {
+    border-left-width: 2px;
+    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(30, 30, 30, 0.75)) 95%, white 5%);
+}
+
+.vsc-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.62rem;
+    min-height: 44px;
+    padding: 0.48rem 0.72rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor, #777) 48%, transparent);
+    background: color-mix(in srgb, hsl(var(--vsc-speaker-hue) 45% 45%) 10%, transparent);
+}
+
+.vsc-avatar {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, hsl(var(--vsc-speaker-hue) 55% 55%) 26%, var(--SmartThemeBlurTintColor, #222));
+    border: 1px solid color-mix(in srgb, hsl(var(--vsc-speaker-hue) 65% 62%) 45%, transparent);
+    font-weight: 750;
+    font-size: 0.78em;
+    letter-spacing: 0.03em;
+}
+
+.vsc-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center 30%;
+}
+
+.vsc-speaker-name {
+    font-weight: 750;
+    letter-spacing: 0.025em;
+    line-height: 1.15;
+}
+
+.vsc-card-body {
+    padding: 0.72rem 0.82rem 0.78rem;
+    line-height: 1.55;
+}
+
+.vsc-card-body > :first-child {
+    margin-top: 0;
+}
+
+.vsc-card-body > :last-child {
+    margin-bottom: 0;
+}
+
+.vsc-card-body q {
+    font-style: normal;
+}
+
+.vsc-portrait-group {
+    margin: 0.7rem 0;
+}
+
+.vsc-portrait-group-title {
+    font-weight: 650;
+    margin-bottom: 0.35rem;
+}
+
+.vsc-portrait-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(82px, 1fr));
+    gap: 0.5rem;
+}
+
+.vsc-portrait-item {
+    position: relative;
+    min-height: 88px;
+    border: 1px solid var(--SmartThemeBorderColor, #777);
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.vsc-portrait-item.is-default {
+    outline: 2px solid rgba(255, 210, 80, 0.7);
+    outline-offset: 1px;
+}
+
+.vsc-portrait-item > img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center 30%;
+}
+
+.vsc-portrait-controls {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+}
+
+.vsc-small-button {
+    min-width: 0 !important;
+    padding: 0.2rem 0.45rem !important;
+    line-height: 1 !important;
+}
+
+.vsc-empty {
+    opacity: 0.68;
+    padding: 0.65rem 0;
+}
+
+@media (max-width: 700px) {
+    .vsc-block-list {
+        gap: 0.55rem;
+    }
+
+    .vsc-card {
+        border-radius: 10px;
+    }
+
+    .vsc-card-header {
+        min-height: 40px;
+        padding: 0.4rem 0.55rem;
+    }
+
+    .vsc-avatar {
+        flex-basis: 34px;
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+    }
+
+    .vsc-card-body {
+        padding: 0.58rem 0.65rem 0.65rem;
+    }
+}
